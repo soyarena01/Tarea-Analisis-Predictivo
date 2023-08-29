@@ -1,0 +1,181 @@
+---
+title: "Practica I"
+author: "Reyno Alcántara y Rubi Lorenzo"
+date: "2023-08-18"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(GGally)
+library(car)
+library(broom)
+library(tree)
+library(patchwork)
+```
+
+## Modelo de Negocio
+
+En este estudio tenemos interes de indentificar si la percepción de 
+felicidad de los paises depende de el pib percapita de los paises, 
+las ayudas sociales y la percepción de libertad de elegir de las personas. 
+Para ello vamos a realizar un medolo de  regresión lineal muliple.
+
+se utilizó los datos del Happynes Report del 2019 que muestra datos sobre la percepción de felicidad de 156 paises, asi como el pib per capita, ayudas sociales y la percepción de libertad para elegir. esta base de datos fue  tomada de la plataforma kaggle.
+
+## Analisís Exploratorio
+
+
+**Carga de base de datos  y cambio de nombre de variables**
+```{r}
+
+happy<-read.csv("world_happines.csv")
+
+happy$Country.or.region<-as.factor(happy$Country.or.region)
+
+felicidad<-happy$Score
+pib_percapita<-happy$GDP.per.capita
+Ayuda_social<-happy$Social.support
+libertad<-happy$Freedom.to.make.life.choices
+```
+
+
+**Anáalisis exploratorio**
+
+
+
+Finlandia es el país que reporta una percepcción mayor de felicidad seguido de Dinamaarca y Noruega. Los paisees con menor percepción de felicidad son Sudan del Sur, Africa Central y Afganistan.
+
+
+```{r}
+fel<-happy%>%
+  select(Country.or.region,Score,GDP.per.capita,Social.support,Freedom.to.make.life.choices)
+
+head(fel)
+tail(fel)
+```
+
+
+
+
+
+
+```{r}
+## promedio
+happy%>%
+ select(c(Score,GDP.per.capita,Social.support),Freedom.to.make.life.choices)%>%
+  summarise(felicidad_promedio = mean(Score),pib_promedio = mean(GDP.per.capita), ayuda_promedio = mean(Social.support), 
+            libertad_promedio =mean(Freedom.to.make.life.choices))
+
+
+## Mediana
+
+happy%>%
+  select(c(Score,GDP.per.capita,Social.support),Freedom.to.make.life.choices)%>%
+  summarise(felicidad_mediana = median(Score),
+pib_mediana = median(GDP.per.capita),    ayuda_mediana = median(Social.support), 
+            libertad_mediana =median(Freedom.to.make.life.choices))
+
+
+## Desviación Estandar
+
+happy%>%
+  select(c(Score,GDP.per.capita,Social.support),Freedom.to.make.life.choices)%>%
+  summarise(felicidad_sd = sd(Score),pib_sd = sd(GDP.per.capita),
+  ayuda_sd = sd(Social.support),libertad_sd =sd(Freedom.to.make.life.choices))
+
+```
+
+
+
+
+*Histograma*
+
+La variable felicidad muestra una forma ligeramente parecidad a una distribución normal.
+
+La variable Pib per capita muestra una forma parecida a una distribución uniforme.
+
+Las variables ayuda social y libertad para elegir muestran un claro sesgo a la izquiera.pobablemente se explique porque los paises con mañor ingreso son los que aportan mayor ayuda social y también en general tiene mayor libertad para elegir.
+
+
+```{r}
+ggplot(happy,aes(x=felicidad))+geom_histogram(binwidth =0.1,col='black',fill='blue',alpha=0.4)
+
+ggplot(happy,aes(x=pib_percapita))+geom_histogram(binwidth =0.1,col='black',fill='blue',alpha=0.4)
+
+ggplot(happy,aes(x=Ayuda_social))+geom_histogram(binwidth =0.1,col='black',fill='blue',alpha=0.4)
+
+ggplot(happy,aes(x=libertad))+geom_histogram(binwidth =0.1,col='black',fill='blue',alpha=0.4)
+
+```
+
+
+**Boxplot**
+
+
+El gráfico boxplot  muestra que la variable felicidad y el Pib percapita no tienen valores extremos, sin embargo la ayuda social y la libertad para elegir tienen vaores atipicos.
+
+```{r}
+boxplot(felicidad)$out
+boxplot(pib_percapita)$out
+boxplot(Ayuda_social)$out
+boxplot(libertad)$out
+```
+
+
+**Graficad de densidad**
+
+Podemos observar que la variable felicidad tiene una forma que se asemeja ligeramente a la distribción normal al igual que observamos en el histograma.
+
+La variable pib per capita muestra una ligero sesgo a la izquierda.
+
+Las variables libertad y ayuda social presentan una sesgo marcado a la izquierda.
+
+
+
+```{r}
+ggplot(happy) + 
+  geom_density(aes(x =felicidad), fill = 'steelblue') + 
+  xlab("felicidad") + 
+  ylab("Frecuencia") + 
+  ggtitle("Distribución de la variable felicidad (Densidad)") +
+  theme_minimal()
+
+ggplot(happy) + 
+  geom_density(aes(x = pib_percapita), fill = 'green') + 
+  xlab("GDP.per.capita") + 
+  ylab("Frecuencia") + 
+  ggtitle("Distribución de la variable pib_percapita (Densidad)") +
+  theme_minimal()
+
+ggplot(happy) + 
+  geom_density(aes(x = Ayuda_social), fill = 'red') + 
+  xlab("Social.support") + 
+  ylab("Frecuencia") + 
+  ggtitle("Distribución de la variable Ayuda_social (Densidad)") +
+  theme_minimal()
+
+ggplot(happy) + 
+  geom_density(aes(x = libertad), fill = 'pink') + 
+  xlab("libertad") + 
+  ylab("Frecuencia") + 
+  ggtitle("Distribución de la variable libertad (Densidad)") +
+  theme_minimal()
+```
+
+
+**Modelo de regresión**
+
+Los resultados de la regresión multiple muestra que el aumento en una unidad del pib per capita la percepción de felicidad aumenta en 1.2 unidades. Cuándo la ayuda social aumenta en una unidad la percepccion de felicidad aumenta en 1.18 unidades. Cuando la libertad de elegir aumenta en una unidad la percepción de felicidad aumenta en 1.9 unidades.
+
+Concluimos que la libertad para elegir es la variable que más aporta al incremento de la percepcción de felicidad en los paises.
+
+```{r}
+mod1<-lm(Score~GDP.per.capita+Social.support+Freedom.to.make.life.choices,
+         happy)
+summary(mod1)
+```
+
+
