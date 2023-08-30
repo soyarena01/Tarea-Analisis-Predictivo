@@ -22,7 +22,7 @@ felicidad de los países depende del pib percapita de los paises,
 las ayudas sociales y la percepción de libertad de elegir de las personas. 
 Para ello vamos a realizar un modelo de  regresión lineal múltiple.
 
-Se utilizó los datos del Happynes Report del 2019 que muestra datos sobre la percepción de felicidad de 156 países, asi como el pib per capita, ayudas sociales y la percepción de libertad para elegir. Esta base de datos fue  tomada de la plataforma kaggle.
+Se utilizó los datos del Happynes Report del 2019 que muestra datos sobre la percepción de felicidad de 156 países, así como el pib per capita, ayudas sociales y la percepción de libertad para elegir. Esta base de datos fue  tomada de la plataforma Kaggle.
 
 ## Análisis Exploratorio
 
