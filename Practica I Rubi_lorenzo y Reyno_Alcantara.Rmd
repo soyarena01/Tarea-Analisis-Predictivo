@@ -129,7 +129,7 @@ ggplot(happy) +
 mod1<-lm(Score~GDP.per.capita+Social.support+Freedom.to.make.life.choices,
          happy)
 summary(mod1)
-Los resultados de la regresión múltiple muestran que al aumentar en una unidad el pib per capita la percepción de felicidad aumenta en **1.2 unidades**, cuando la ayuda social aumenta en una unidad la percepción de felicidad aumenta en 1.18 unidades, cuando la libertad de elegir aumenta en una unidad la percepción de felicidad aumenta en 1.9 unidades.
+Los resultados de la regresión múltiple muestran que al aumentar en una unidad el pib per capita la percepción de felicidad aumenta en 1.2 unidades, cuando la ayuda social aumenta en una unidad la percepción de felicidad aumenta en 1.18 unidades, cuando la libertad de elegir aumenta en una unidad la percepción de felicidad aumenta en 1.9 unidades.
 
 Concluimos que la libertad para elegir es la variable que más aporta al incremento de la percepción de felicidad en los países.
 ```
