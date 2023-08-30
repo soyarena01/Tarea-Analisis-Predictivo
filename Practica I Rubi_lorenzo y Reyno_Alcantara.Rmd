@@ -22,7 +22,7 @@ felicidad de los paises depende de el pib percapita de los paises,
 las ayudas sociales y la percepción de libertad de elegir de las personas. 
 Para ello vamos a realizar un modelo de  regresión lineal multiple.
 
-se utilizó los datos del Happynes Report del 2019 que muestra datos sobre la percepción de felicidad de 156 paises, asi como el pib per capita, ayudas sociales y la percepción de libertad para elegir. esta base de datos fue  tomada de la plataforma kaggle.
+Se utilizó los datos del Happynes Report del 2019 que muestra datos sobre la percepción de felicidad de 156 países, asi como el pib per capita, ayudas sociales y la percepción de libertad para elegir. Esta base de datos fue  tomada de la plataforma kaggle.
 
 ## Análisis Exploratorio
 
@@ -39,7 +39,7 @@ Ayuda_social<-happy$Social.support
 libertad<-happy$Freedom.to.make.life.choices
 ```
 **Anáalisis exploratorio**
-Finlandia es el país que reporta una percepcción mayor de felicidad seguido de Dinamaarca y Noruega. Los paisees con menor percepción de felicidad son Sudan del Sur, Africa Central y Afganistan.
+Finlandia es el país que reporta una percepcción mayor de felicidad seguido de Dinamarca y Noruega. Los países con menor percepción de felicidad son Sudan del Sur, África Central y Afganistan.
 
 ```{r}
 fel<-happy%>%
@@ -70,11 +70,11 @@ happy%>%
 ```
 *Histograma*
 
-La variable felicidad muestra una forma ligeramente parecidad a una distribución normal.
+La variable felicidad muestra una forma ligeramente parecida a una distribución normal.
 
 La variable Pib per capita muestra una forma parecida a una distribución uniforme.
 
-Las variables ayuda social y libertad para elegir muestran un claro sesgo a la izquiera.pobablemente se explique porque los paises con mañor ingreso son los que aportan mayor ayuda social y también en general tiene mayor libertad para elegir.
+Las variables ayuda social y libertad para elegir muestran un claro sesgo a la izquierda, probablemente se explique porque los países con mayor ingreso son los que aportan mayor ayuda social y también en general tienen mayor libertad para elegir.
 
 ```{r}
 ggplot(happy,aes(x=felicidad))+geom_histogram(binwidth =0.1,col='black',fill='blue',alpha=0.4)
@@ -86,17 +86,15 @@ ggplot(happy,aes(x=Ayuda_social))+geom_histogram(binwidth =0.1,col='black',fill=
 ggplot(happy,aes(x=libertad))+geom_histogram(binwidth =0.1,col='black',fill='blue',alpha=0.4)
 ```
 **Boxplot**
-El gráfico boxplot  muestra que la variable felicidad y el Pib percapita no tienen valores extremos, sin embargo la ayuda social y la libertad para elegir tienen vaores atipicos.
+El gráfico boxplot  muestra que la variable felicidad y el Pib percapita no tienen valores extremos, sin embargo, la ayuda social y la libertad para elegir tienen valores atípicos.
 ```{r}
 boxplot(felicidad)$out
 boxplot(pib_percapita)$out
 boxplot(Ayuda_social)$out
 boxplot(libertad)$out
 ```
-**Graficad de densidad**
-Podemos observar que la variable felicidad tiene una forma que se asemeja ligeramente a la distribción normal al igual que observamos en el histograma.
-La variable pib per capita muestra una ligero sesgo a la izquierda.
-Las variables libertad y ayuda social presentan una sesgo marcado a la izquierda.
+**Grafica de densidad**
+Podemos observar que la variable felicidad tiene una forma que se asemeja ligeramente a la distribción normal al igual que observamos en el histograma. La variable pib per capita muestra una ligero sesgo a la izquierda y las variables libertad y ayuda social presentan un sesgo marcado a la izquierda.
 ```{r}
 ggplot(happy) + 
   geom_density(aes(x =felicidad), fill = 'steelblue') + 
@@ -131,9 +129,9 @@ ggplot(happy) +
 mod1<-lm(Score~GDP.per.capita+Social.support+Freedom.to.make.life.choices,
          happy)
 summary(mod1)
-Los resultados de la regresión multiple muestra que el aumento en una unidad del pib per capita la percepción de felicidad aumenta en 1.2 unidades. Cuándo la ayuda social aumenta en una unidad la percepccion de felicidad aumenta en 1.18 unidades. Cuando la libertad de elegir aumenta en una unidad la percepción de felicidad aumenta en 1.9 unidades.
+Los resultados de la regresión múltiple muestran que al aumentar en una unidad el pib per capita la percepción de felicidad aumenta en **1.2 unidades**, cuando la ayuda social aumenta en una unidad la percepción de felicidad aumenta en 1.18 unidades, cuando la libertad de elegir aumenta en una unidad la percepción de felicidad aumenta en 1.9 unidades.
 
-Concluimos que la libertad para elegir es la variable que más aporta al incremento de la percepcción de felicidad en los paises.
+Concluimos que la libertad para elegir es la variable que más aporta al incremento de la percepción de felicidad en los países.
 ```
 
 
