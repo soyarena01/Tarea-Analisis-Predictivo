@@ -35,8 +35,6 @@ Ayuda_social<-happy$Social.support
 libertad<-happy$Freedom.to.make.life.choices
 ```
 **Anáalisis exploratorio**
-Finlandia es el país que reporta una percepcción mayor de felicidad seguido de Dinamarca y Noruega. Los países con menor percepción de felicidad son Sudan del Sur, África Central y Afganistan.
-
 ```{r}
 fel<-happy%>%
   select(Country.or.region,Score,GDP.per.capita,Social.support,Freedom.to.make.life.choices)
@@ -62,6 +60,9 @@ happy%>%
   select(c(Score,GDP.per.capita,Social.support),Freedom.to.make.life.choices)%>%
   summarise(felicidad_sd = sd(Score),pib_sd = sd(GDP.per.capita),
   ayuda_sd = sd(Social.support),libertad_sd =sd(Freedom.to.make.life.choices))
+
+Finlandia es el país que reporta una percepcción mayor de felicidad seguido de Dinamarca y Noruega. 
+Los países con menor percepción de felicidad son Sudan del Sur, África Central y Afganistan.
 ```
 *Histograma*
 ```{r}
